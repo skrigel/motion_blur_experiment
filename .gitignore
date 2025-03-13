@@ -1,0 +1,11 @@
+# Node.js dependencies
+node_modules/
+
+# Vite build files
+/dist/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
