@@ -1,39 +1,66 @@
 import { initJsPsych } from 'jspsych';
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import fullscreenPlugin from '@jspsych/plugin-fullscreen';
-import nyan1 from './assets/nyan1.jpeg';
-import nyan2 from './assets/nyan2.jpg';
+import imageButtonResponse from '@jspsych/plugin-image-button-response';
+import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 
-// Initialize jsPsych
-import imageKeyboardResponse from '@jspsych/plugin-image-keyboard-response';
+// Import your images
+import imagePath from './assets/new_03_blur.png';  // Ensure the correct path to your image
 
 const jsPsych = initJsPsych();
 
 // Define the main timeline array
 const timeline = [];
 
-// Preload assets (make sure your assets are in the correct directory)
 // Welcome screen
 timeline.push({
   type: htmlKeyboardResponse,
   stimulus: '<p>Welcome! Press any key to start the experiment.</p>',
 });
 
-// Switch to fullscreen
-timeline.push({
-  type: fullscreenPlugin,  // Plugin name should be lowercase ('fullscreenPlugin')
-  fullscreen_mode: true,
-});
 
-  
-timeline.push({
-    type: imageKeyboardResponse,
-    stimulus: nyan1,  // Path to your image (adjust based on where your images are stored)
-    choices: ['a', 'b', 'c'],  // Choices for user to press
-    prompt: '<p>Press A, B, or C to continue.</p>',
-    data: { trial_type: 'image_keyboard_response' },  // Optional trial metadata
-  });
+// // Fullscreen Mode
+// timeline.push({
+//   type: fullscreenPlugin,
+//   fullscreen_mode: true,
+// });
 
-  
-// Run the experiment
+const createQuestionSlide = (questionText, options, trialType) => {
+  return {
+    type: surveyMultiChoice,
+    preamble: `
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+        <img src="${imagePath}" style="max-width: 50vw; max-height: 50vh; display: block; margin-bottom: 20px;">
+      </div>
+    `,
+    questions: [
+      {
+        prompt: `<div style="text-align: center; font-size: 22px; font-weight: bold;">${questionText}</div>`,
+        options: options,
+        required: true,
+      }
+    ],
+    data: { trial_type: trialType },
+  };
+};
+
+// Define Question Texts
+const objectQuestionText = 'What is this object?';
+const motionQuestionText = 'What direction is this object moving in?';
+
+// Add Object Identification Question
+timeline.push(createQuestionSlide(
+  objectQuestionText, 
+  ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog'], 
+  'object_identification'
+));
+
+// Add Motion Direction Question
+timeline.push(createQuestionSlide(
+  motionQuestionText, 
+  ['Up', 'Down', 'Left', 'Right', 'Into screen', 'Out of screen'], 
+  'motion_direction'
+));
+
+// Run the Experiment
 jsPsych.run(timeline);
