@@ -17,7 +17,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 10000;
-const allowedOrigins = ['https://motion-blur-experiment-jp5s3as38-sashas-projects-116bdc35.vercel.app'];  // Replace with your Vercel URL
+const allowedOrigins = ['https://motion-blur-experiment-on7027ev5-sashas-projects-116bdc35.vercel.app'];  // Replace with your Vercel URL
 
 // Set up the WebSocket server
 const server = app.listen(PORT, () => {
@@ -27,14 +27,17 @@ const server = app.listen(PORT, () => {
 // Middleware
 // app.use(express.static(path.join(__dirname, '../src')));  // Serve static files
 app.use(cors({
-  origin: (origin, callback) => {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS')); 
-    }
-  },
-}));
+    origin: (origin, callback) => {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true); // Allow the request if the origin is in the allowed list
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Specify allowed headers
+  }));
+
 app.use(express.json()); // Parse JSON request bodies
 
 // MongoDB Schema Setup
