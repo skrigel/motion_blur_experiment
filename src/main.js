@@ -3,7 +3,7 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import fullscreenPlugin from '@jspsych/plugin-fullscreen';
 import imageButtonResponse from '@jspsych/plugin-image-button-response';
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
-import bikeImg from './assets/new_03_blur.png';
+import bikeImg from './src/assets/new_03_blur.png';
 
 const API_URL = "https://motion-blur-experiment.onrender.com/api"
 
@@ -119,9 +119,6 @@ Object.values(imageOptions).forEach(([imagePath, objectOptions])=>{
 ));
 
 })
-
-
-
 
 // Run the Experiment
 jsPsych.run(timeline);
