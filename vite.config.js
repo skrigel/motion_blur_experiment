@@ -7,6 +7,9 @@ export default defineConfig({
   },
   server: {
     port: 3000,  // Port for the development server
+    proxy: {
+      '/api': 'http://localhost:5001',  // Proxy API calls to your local backend during development
+    },
   },
   assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif']
 });
