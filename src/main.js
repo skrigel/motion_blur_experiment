@@ -3,7 +3,7 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import fullscreenPlugin from '@jspsych/plugin-fullscreen';
 import imageButtonResponse from '@jspsych/plugin-image-button-response';
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
-// import sendDataToServer from './utils';
+import bikeImg from './assets/new_03_blur.png';
 
 const API_URL = "https://motion-blur-experiment.onrender.com/api"
 
@@ -25,7 +25,7 @@ async function sendDataToServer(responseData){
 
 const jsPsych = initJsPsych();
 
-const imageOptions = {'./src/assets/new_03_blur.png': ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog']};
+const imageOptions = {image1: [bikeImg, ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog']]};
 // Define the main timeline array
 const timeline = [];
 
@@ -102,7 +102,7 @@ const motionQuestionText = 'What direction is this object moving in?';
 // Add Object Identification Question
 
 
-Object.entries(imageOptions).forEach(([imagePath, objectOptions])=>{
+Object.values(imageOptions).forEach(([imagePath, objectOptions])=>{
 
   timeline.push(createQuestionSlide(
     imagePath,
