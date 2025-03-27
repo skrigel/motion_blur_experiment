@@ -25,7 +25,7 @@ async function sendDataToServer(responseData){
 
 const jsPsych = initJsPsych();
 
-const imageOptions = {'src/assets/new_03_blur.png': ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog']};
+const imageOptions = {'./src/assets/new_03_blur.png': ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog']};
 // Define the main timeline array
 const timeline = [];
 

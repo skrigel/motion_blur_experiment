@@ -24,7 +24,7 @@ const Response = mongoose.model("Response", responseSchema);
 import { WebSocketServer } from "ws";
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 10000;
 
 
 // Create WebSocket server and attach it to the same port
@@ -46,7 +46,10 @@ const corsOptions = {
     }
   },
 };
-
+// const corsOptions = {
+//     origin: "*",  // Allow all origins during development
+//   };
+  
 app.use(cors(corsOptions));
 
 // Connect to MongoDB
