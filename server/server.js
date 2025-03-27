@@ -5,6 +5,11 @@ import dotenv from "dotenv";
 import { WebSocketServer } from "ws";
 import path from 'path';
 
+
+import { fileURLToPath } from "url";
+
+// Convert __filename and __dirname using import.meta.url
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load environment variables
