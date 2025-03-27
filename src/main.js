@@ -4,6 +4,7 @@ import fullscreenPlugin from '@jspsych/plugin-fullscreen';
 import imageButtonResponse from '@jspsych/plugin-image-button-response';
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 import bikeImg from './src/assets/new_03_blur.png';
+const exPath = "https://www.w3schools.com/images/img_girl.jpg"
 
 const API_URL = "https://motion-blur-experiment.onrender.com/api"
 
@@ -25,7 +26,7 @@ async function sendDataToServer(responseData){
 
 const jsPsych = initJsPsych();
 
-const imageOptions = {image1: [bikeImg, ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog']]};
+const imageOptions = {image1: [exPath, ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog']]};
 // Define the main timeline array
 const timeline = [];
 
