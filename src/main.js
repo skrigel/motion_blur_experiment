@@ -5,9 +5,11 @@ import imageButtonResponse from '@jspsych/plugin-image-button-response';
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 // import sendDataToServer from './utils';
 
+API_URL = "https://motion-blur-experiment.onrender.com/api"
+
 async function sendDataToServer(responseData){
   try {
-    const res = await fetch("http://localhost:5001/api/responses", {
+    const res = await fetch(`${API_URL}/responses`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(responseData),
