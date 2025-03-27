@@ -5,7 +5,7 @@ import imageButtonResponse from '@jspsych/plugin-image-button-response';
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 // import sendDataToServer from './utils';
 
-API_URL = "https://motion-blur-experiment.onrender.com/api"
+const API_URL = "https://motion-blur-experiment.onrender.com/api"
 
 async function sendDataToServer(responseData){
   try {

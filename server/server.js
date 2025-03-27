@@ -17,7 +17,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 10000;
-const allowedOrigins = ['https://motion-blur-experiment-64p3fw3qv-sashas-projects-116bdc35.vercel.app'];  // Replace with your Vercel URL
+const allowedOrigins = ['https://motion-blur-experiment-jp5s3as38-sashas-projects-116bdc35.vercel.app'];  // Replace with your Vercel URL
 
 // Set up the WebSocket server
 const server = app.listen(PORT, () => {
