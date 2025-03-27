@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import { WebSocketServer } from "ws";
 import path from 'path';
 
+const __dirname = path.dirname(__filename);
+
 // Load environment variables
 dotenv.config();
 
