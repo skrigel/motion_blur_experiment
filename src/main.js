@@ -34,7 +34,7 @@ const timeline = [];
 // Welcome screen
 timeline.push({
   type: htmlKeyboardResponse,
-  stimulus: '<p>Welcome! Press any key to start the experiment.</p>',
+  stimulus: '<p>Welcome! Press any key to read instructions.</p>',
 });
 
 const instructions = {
@@ -44,13 +44,8 @@ const instructions = {
     of the screen.</p><p> There will be a blurred object highlighted in a geometric box, and 
     you will be asked two questions about the object.</p>
     <p>1. <strong>What is the object?</strong> - pick the best choice amongst the provided options</p>
-      <p>2. <strong>In what direction is the object moving?</strong> - pick the best choice amongst the provided options</p>
-    <div style='width: 700px;'>
-    <div style='float: left;'><img src='img/blue.png'></img>
-    <p class='small'><strong>Press the F key</strong></p></div>
-    <div style='float: right;'><img src='img/orange.png'></img>
-    <p class='small'><strong>Press the J key</strong></p></div>
-    </div>
+    <p>2. <strong>In what direction is the object moving?</strong> - pick the best choice amongst the provided options</p>
+  
     <p>Press any key to begin.</p>
   `,
   post_trial_gap: 1500
