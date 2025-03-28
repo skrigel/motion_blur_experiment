@@ -13,7 +13,7 @@ The experiment is designed to evaluate human performance in identifying the subj
 - **index.html**: Main file that loads and runs the experiment.
 - **src/main.js**: Contains the experiment logic and trial setup.
 - **box_generator.py**: Scripts to generate copies of experimental images with colored bounding boxes
-- **src/assets**: Folder containing the images or other stimuli used in the experiment.
+- **public**: Folder containing the static images used in the experiment.
 
 ## Data Collection
 
