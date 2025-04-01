@@ -1,12 +1,13 @@
 import { initJsPsych } from 'jspsych';
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import fullscreenPlugin from '@jspsych/plugin-fullscreen';
+import imageOptions from './images';
 import imageButtonResponse from '@jspsych/plugin-image-button-response';
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
+import { getProlificID } from './utils';
 // const exPath = "https://www.w3schools.com/images/img_girl.jpg"
 
 const API_URL = "https://motion-blur-experiment.onrender.com/api"
-const bikeImg = "/new_03_blur.png"; 
 
 async function sendDataToServer(responseData){
   try {
@@ -21,14 +22,11 @@ async function sendDataToServer(responseData){
     console.error("Error sending data:", error);
   }
 };
-// Import your images
-// import imagePath from './assets/new_03_blur.png';  // Ensure the correct path to your image
+
+const prolificID = getProlificID();
+const timeline=[];
 
 const jsPsych = initJsPsych();
-
-const imageOptions = {image1: [bikeImg, ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog']]};
-// Define the main timeline array
-const timeline = [];
 
 
 // Welcome screen
@@ -59,7 +57,7 @@ timeline.push(instructions)
 // });
 
 // Modify createQuestionSlide to send data
-const createQuestionSlide = (imagePath, questionText, options, trialType) => {
+const createQuestionSlide = (imagePath, questionText, options, trialType, trialId) => {
   return {
     type: surveyMultiChoice,
     preamble: `
@@ -83,6 +81,8 @@ const createQuestionSlide = (imagePath, questionText, options, trialType) => {
         image: data.image || "No image provided",  // Ensure image is included
         selection: responseValue || "Null",
         trialType: trialType || "No trial type provided", // Ensure trialType is included
+        trialId: trialId,
+        prolificID: prolificID
       };
     
       console.log("Payload being sent:", payload); // Debugging log
@@ -98,20 +98,22 @@ const motionQuestionText = 'What direction is this object moving in?';
 // Add Object Identification Question
 
 
-Object.values(imageOptions).forEach(([imagePath, objectOptions])=>{
+imageOptions.forEach(([imagePath, objectOptions], idx)=>{
 
   timeline.push(createQuestionSlide(
     imagePath,
     objectQuestionText, 
     objectOptions, 
-    'object identification'
+    'object identification',
+    idx
   ));
 
   // Add Motion Direction Question
   timeline.push(createQuestionSlide(imagePath,
   motionQuestionText, 
   ['Up', 'Down', 'Left', 'Right', 'Into screen', 'Out of screen'], 
-  'motion_direction'
+  'motion_direction',
+  idx
 ));
 
 })

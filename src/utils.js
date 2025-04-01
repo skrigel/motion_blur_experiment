@@ -11,3 +11,8 @@ export default async function sendDataToServer(responseData){
       console.error("Error sending data:", error);
     }
   };
+
+  export function getProlificID() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get("PROLIFIC_PID") || "unknown";
+  }
