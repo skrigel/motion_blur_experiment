@@ -57,7 +57,7 @@ timeline.push(instructions)
 // });
 
 // Modify createQuestionSlide to send data
-const createQuestionSlide = (imagePath, questionText, options, trialType, trialId) => {
+const createQuestionSlide = (imagePath, questionText, options, trialType, trialId, prolificID) => {
   return {
     type: surveyMultiChoice,
     preamble: `
@@ -82,7 +82,7 @@ const createQuestionSlide = (imagePath, questionText, options, trialType, trialI
         selection: responseValue || "Null",
         trialType: trialType || "No trial type provided", // Ensure trialType is included
         trialId: trialId,
-        prolificID: prolificID
+        prolificID: prolificID || "Unknown"
       };
     
       console.log("Payload being sent:", payload); // Debugging log
@@ -105,7 +105,8 @@ imageOptions.forEach(([imagePath, objectOptions], idx)=>{
     objectQuestionText, 
     objectOptions, 
     'object identification',
-    idx
+    idx,
+    prolificID
   ));
 
   // Add Motion Direction Question
@@ -113,7 +114,8 @@ imageOptions.forEach(([imagePath, objectOptions], idx)=>{
   motionQuestionText, 
   ['Up', 'Down', 'Left', 'Right', 'Into screen', 'Out of screen'], 
   'motion_direction',
-  idx
+  idx,
+  prolificID
 ));
 
 })

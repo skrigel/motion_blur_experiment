@@ -27,7 +27,6 @@ const server = app.listen(PORT, () => {
 // app.use(express.static(path.join(__dirname, '../src')));  // Serve static files
 const allowedOrigins = [
   "https://motion-blur-experiment-git-main-sashas-projects-116bdc35.vercel.app",
-  "https://motion-blur-experiment-35ay1vhnw-sashas-projects-116bdc35.vercel.app",
   "https://motion-blur-experiment.vercel.app"
 ];
 
