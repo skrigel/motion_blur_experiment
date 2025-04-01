@@ -23,7 +23,7 @@ async function sendDataToServer(responseData){
   }
 };
 
-const prolificID = getProlificID();
+
 const timeline=[];
 
 const jsPsych = initJsPsych();
@@ -82,7 +82,7 @@ const createQuestionSlide = (imagePath, questionText, options, trialType, trialI
         selection: responseValue || "Null",
         trialType: trialType || "No trial type provided", // Ensure trialType is included
         trialId: trialId,
-        prolificID: prolificID || "Unknown"
+        prolificId: prolificID || "Unknown"
       };
     
       console.log("Payload being sent:", payload); // Debugging log
@@ -96,7 +96,7 @@ const objectQuestionText = 'What is this object?';
 const motionQuestionText = 'What direction is this object moving in?';
 
 // Add Object Identification Question
-
+const prolificID = getProlificID();
 
 imageOptions.forEach(([imagePath, objectOptions], idx)=>{
 
