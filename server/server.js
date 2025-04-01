@@ -46,6 +46,7 @@ const responseSchema = new mongoose.Schema({
   selection: {type: String, required: true},  
   trialType: {type: String, required: true},
   trialId: {type: String, required: true},
+  prolificId: {type: String, required: true},
   timestamp: { type: Date, default: Date.now },
 });
 
@@ -73,8 +74,8 @@ app.get('/api/responses', (req, res) => {
 // API Route to Save Responses
 app.post("/api/responses", async (req, res) => {
   try {
-    const { image, selection, trialType, trialId } = req.body;
-    const newResponse = new Response({ image, selection, trialType, trialId });
+    const { image, selection, trialType, trialId, prolificId } = req.body;
+    const newResponse = new Response({ image, selection, trialType, trialId, prolificId });
     await newResponse.save();
     res.status(201).json({ message: "Response saved" });
   } catch (err) {
