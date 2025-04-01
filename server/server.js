@@ -17,7 +17,6 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 10000;
-const allowedOrigins = ['https://motion-blur-experiment-on7027ev5-sashas-projects-116bdc35.vercel.app'];  // Replace with your Vercel URL
 
 // Set up the WebSocket server
 const server = app.listen(PORT, () => {
@@ -26,17 +25,27 @@ const server = app.listen(PORT, () => {
 
 // Middleware
 // app.use(express.static(path.join(__dirname, '../src')));  // Serve static files
+const allowedOrigins = [
+  "https://motion-blur-experiment-git-main-sashas-projects-116bdc35.vercel.app",
+  "https://motion-blur-experiment-35ay1vhnw-sashas-projects-116bdc35.vercel.app",
+  "https://motion-blur-experiment.vercel.app"
+];
+
+// ✅ Middleware to handle CORS
 app.use(cors({
-    origin: (origin, callback) => {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, true); // Allow the request if the origin is in the allowed list
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'] // Specify allowed headers
-  }));
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// ✅ Fix: Ensure preflight (OPTIONS) requests are handled
+app.options("*", cors());
 
 app.use(express.json()); // Parse JSON request bodies
 
