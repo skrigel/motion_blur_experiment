@@ -106,7 +106,7 @@ const motionQuestionText = 'What direction is this object moving in?';
 const prolificID = getProlificID();
 let csvData = [];
 
-fetch('api/data')
+fetch(`${API_URL}/data`)
   .then(res => res.json())
   .then(data => {
 
