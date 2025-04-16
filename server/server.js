@@ -4,6 +4,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { WebSocketServer } from "ws";
 import path from 'path';
+import Papa from 'papaparse';
+import fs from 'fs';
 
 
 import { fileURLToPath } from "url";
@@ -52,6 +54,7 @@ app.use(express.json()); // Parse JSON request bodies
 const responseSchema = new mongoose.Schema({
   image: {type: String, required: true},
   selection: {type: String, required: true},  
+  trueLabel: {type:String, required: true},
   trialType: {type: String, required: true},
   trialId: {type: String, required: true},
   prolificId: {type: String, required: true},
@@ -83,13 +86,33 @@ app.get('/api/responses', (req, res) => {
 app.post("/api/responses", async (req, res) => {
   try {
     const { image, selection, trialType, trialId, prolificId } = req.body;
-    const newResponse = new Response({ image, selection, trialType, trialId, prolificId });
+    const newResponse = new Response({ image, selection, trueLabel, trialType, trialId, prolificId });
     await newResponse.save();
     res.status(201).json({ message: "Response saved" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.get('/api/data', (req, res) => {
+  const filePath = path.join(__dirname, 'data.csv'); // ✅ Points to /server/data.csv
+  console.log('Reading file from:', filePath);
+
+  fs.readFile(filePath, 'utf8', (err, csvData) => {
+    if (err) {
+      console.error('❌ Failed to read file:', err.message);
+      return res.status(500).json({ error: 'Failed to read CSV file' });
+    }
+
+    const results = Papa.parse(csvData, {
+      header: true,
+      skipEmptyLines: true,
+    });
+    res.json(results.data);
+  });
+});
+
+
 
 // Create WebSocket server and attach it to the HTTP server
 const wss = new WebSocketServer({ server });

@@ -1,10 +1,11 @@
 import { initJsPsych } from 'jspsych';
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import fullscreenPlugin from '@jspsych/plugin-fullscreen';
-import imageOptions from './images';
 import imageButtonResponse from '@jspsych/plugin-image-button-response';
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 import { getProlificID } from './utils';
+import Papa from 'papaparse';
+
 // const exPath = "https://www.w3schools.com/images/img_girl.jpg"
 
 const API_URL = "https://motion-blur-experiment.onrender.com/api"
@@ -22,6 +23,11 @@ async function sendDataToServer(responseData){
     console.error("Error sending data:", error);
   }
 };
+
+
+const imageOptions = ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog']
+
+
 
 
 const timeline=[];
@@ -57,7 +63,7 @@ timeline.push(instructions)
 // });
 
 // Modify createQuestionSlide to send data
-const createQuestionSlide = (imagePath, questionText, options, trialType, trialId, prolificID) => {
+const createQuestionSlide = (imagePath, questionText, options, trueDir, trueIdentity, trialType, trialId, prolificID) => {
   return {
     type: surveyMultiChoice,
     preamble: `
@@ -80,6 +86,7 @@ const createQuestionSlide = (imagePath, questionText, options, trialType, trialI
       const payload = {
         image: data.image || "No image provided",  // Ensure image is included
         selection: responseValue || "Null",
+        trueLabel: trialType=== 'object_identification' ? trueIdentity : trueDir,
         trialType: trialType || "No trial type provided", // Ensure trialType is included
         trialId: trialId,
         prolificId: prolificID || "Unknown"
@@ -97,28 +104,32 @@ const motionQuestionText = 'What direction is this object moving in?';
 
 // Add Object Identification Question
 const prolificID = getProlificID();
+let csvData = [];
 
-imageOptions.forEach(([imagePath, objectOptions], idx)=>{
+fetch('api/data')
+  .then(res => res.json())
+  .then(data => {
 
-  timeline.push(createQuestionSlide(
-    imagePath,
-    objectQuestionText, 
-    objectOptions, 
-    'object identification',
-    idx,
-    prolificID
-  ));
+    csvData = data.map((row)=> [`/${row['File Name']}`, imageOptions, row['Object Identity'], row['Motion Direction']])
+    console.log('CSV data:', csvData);
+    // You can now use csvData in your code
 
-  // Add Motion Direction Question
-  timeline.push(createQuestionSlide(imagePath,
-  motionQuestionText, 
-  ['Up', 'Down', 'Left', 'Right', 'Into screen', 'Out of screen'], 
-  'motion_direction',
-  idx,
-  prolificID
-));
+    console.log('Parsed image paths:', csvData.map(d => d[0]));
 
-})
+    csvData.forEach(([imagePath, objectOptions, trueIdentity, trueDirection], idx) => {
+      timeline.push(createQuestionSlide(
+        imagePath, objectQuestionText, objectOptions, trueDirection, trueIdentity,
+        'object_identification', idx, prolificID
+      ));
+
+      timeline.push(createQuestionSlide(
+        imagePath,  motionQuestionText,
+        ['Up', 'Down', 'Left', 'Right', 'Into screen', 'Out of screen'],
+        trueDirection, trueIdentity, 'motion_direction', idx, prolificID
+      ));
+    });
+  });
+
 
 // Run the Experiment
 jsPsych.run(timeline);
