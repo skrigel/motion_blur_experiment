@@ -85,7 +85,7 @@ app.get('/api/responses', (req, res) => {
 // API Route to Save Responses
 app.post("/api/responses", async (req, res) => {
   try {
-    const { image, selection, trialType, trialId, prolificId } = req.body;
+    const { image, selection, trueLabel, trialType, trialId, prolificId } = req.body;
     const newResponse = new Response({ image, selection, trueLabel, trialType, trialId, prolificId });
     await newResponse.save();
     res.status(201).json({ message: "Response saved" });
