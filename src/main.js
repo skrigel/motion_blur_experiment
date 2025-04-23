@@ -113,7 +113,8 @@ Promise.all([
   fetch(`${API_URL}/data`).then(res => res.json()),
   fetch(`${API_URL}/get-progress?prolificId=${prolificID}`).then(res => res.json())
 ]).then(([csvData, progress]) => {
-  const completed = new Set(progress.completedTrialIds);
+
+  const completed = !progress ? []: progress.completed;
 
   csvData.forEach((row, idx) => {
     if (!completed.has(idx)) {
@@ -140,15 +141,15 @@ Promise.all([
     }
   });
 
-  timeline.push({
-    type: htmlKeyboardResponse,
-    stimulus: `<p>End of Survey</p>`,
-  });
 
-  jsPsych.run(timeline);
 });
 
+timeline.push({
+  type: htmlKeyboardResponse,
+  stimulus: `<p>End of Survey</p>`,
+});
 
+jsPsych.run(timeline);
 
 // const endSlide = {
 //     type: htmlKeyboardResponse,

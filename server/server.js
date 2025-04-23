@@ -85,13 +85,33 @@ app.get('/', (req, res) => {
 // });
 
 // API Route to Save Responses
+// app.get('/api/get-progress', async (req, res) => {
+//   const { prolificId } = req.query;
+//   try {
+//     const userResponses = await Response.find({ prolificId: prolificId });
+//     const completed = userResponses.map(r => r.trialId);
+//     res.json({ completedTrialIds: completed });
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to retrieve progress" });
+//   }
+// });
+
 app.get('/api/get-progress', async (req, res) => {
   const { prolificId } = req.query;
+
+  if (!prolificId) {
+    return res.status(400).json({ error: "Missing prolificId" });
+  }
+
   try {
-    const userResponses = await Response.find({ prolificId: prolificId });
-    const completed = userResponses.map(r => r.trialId);
-    res.json({ completedTrialIds: completed });
+    const userResponses = await Response.find({ prolificId });
+    const completed = userResponses.length > 0
+      ? userResponses.map(r => r.trialId)
+      : [];
+
+    res.json({ completedTrialIds: completed }); // ✅ Always return an object
   } catch (err) {
+    console.error('Error in /api/get-progress:', err);
     res.status(500).json({ error: "Failed to retrieve progress" });
   }
 });
