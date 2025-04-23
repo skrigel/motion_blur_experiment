@@ -149,10 +149,13 @@ Promise.all([
   });
 
 
-timeline.push({
-  type: htmlKeyboardResponse,
-  stimulus: `<p>End of Survey</p>`,
-});
+const final_trial = {
+    type: htmlKeyboardResponse,
+    stimulus: `<p>You've finished the last task. Thanks for participating!</p>
+      <p><a href="https://app.prolific.com/submissions/complete?cc=CV0UQKH3">Click here to return to Prolific and complete the study</a>.</p>`,
+    choices: "NO_KEYS"
+  }
+timeline.push(final_trial)
 
 jsPsych.run(timeline);
 
