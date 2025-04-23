@@ -35,6 +35,11 @@ const instructions = {
 };
 
 timeline.push(instructions)
+// // Fullscreen Mode
+// timeline.push({
+//   type: fullscreenPlugin,
+//   fullscreen_mode: true,
+// });
 
 // Modify createQuestionSlide to send data
 const createQuestionSlide = (imagePath, questionText, options, trueDir, trueIdentity, trialType, trialId, prolificID) => {
@@ -78,44 +83,83 @@ const motionQuestionText = 'What direction is this object moving in?';
 
 // Add Object Identification Question
 const prolificID = getProlificID();
-// let csvData = [];
 let csvData = [];
 
-fetch(`${API_URL}/data`)
-  .then(res => res.json())
-  .then(csvData => {
-    return fetch(`${API_URL}/get-progress?prolificId=${prolificID}`)
-      .then(res => res.json())
-      .then(progress => {
-        const completed = new Set(progress.completedTrialIds);
-        csvData.forEach((row, idx) => {
-          if (!completed.has(idx)) {
-            timeline.push(createQuestionSlide(
-              `/${row['File Name']}`,
-              objectQuestionText,
-              imageOptions,
-              row['Motion Direction'],
-              row['Object Identity'],
-              'object_identification',
-              idx
-            ));
-            timeline.push(createQuestionSlide(
-              `/${row['File Name']}`,
-              motionQuestionText,
-              ['Up', 'Down', 'Left', 'Right', 'Into screen', 'Out of screen'],
-              row['Motion Direction'],
-              row['Object Identity'],
-              'motion_direction',
-              idx
-            ));
-          }
-        });
+// fetch(`${API_URL}/data`)
+//   .then(res => res.json())
+//   .then(data => {
 
-        timeline.push({
-          type: htmlKeyboardResponse,
-          stimulus: `<p>End of Survey</p>`,
-        });
+//     csvData = data.map((row)=> [`/${row['File Name']}`, imageOptions, row['Object Identity'], row['Motion Direction']])
+//     console.log('CSV data:', csvData);
+//     // You can now use csvData in your code
 
-        jsPsych.run(timeline);
-      });
+//     console.log('Parsed image paths:', csvData.map(d => d[0]));
+
+//     csvData.forEach(([imagePath, objectOptions, trueIdentity, trueDirection], idx) => {
+//       timeline.push(createQuestionSlide(
+//         imagePath, objectQuestionText, objectOptions, trueDirection, trueIdentity,
+//         'object_identification', idx, prolificID
+//       ));
+
+//       timeline.push(createQuestionSlide(
+//         imagePath,  motionQuestionText,
+//         ['Up', 'Down', 'Left', 'Right', 'Into screen', 'Out of screen'],
+//         trueDirection, trueIdentity, 'motion_direction', idx, prolificID
+//       ));
+//     });
+//   });
+
+Promise.all([
+  fetch(`${API_URL}/data`).then(res => res.json()),
+  fetch(`${API_URL}/get-progress?prolificId=${prolificID}`).then(res => res.json())
+]).then(([csvData, progress]) => {
+  const completed = new Set(progress.completedTrialIds);
+
+  csvData.forEach((row, idx) => {
+    if (!completed.has(idx)) {
+      timeline.push(createQuestionSlide(
+        `/${row['File Name']}`,
+        objectQuestionText,
+        imageOptions,
+        row['Motion Direction'],
+        row['Object Identity'],
+        'object_identification',
+        idx,
+        prolificID
+      ));
+      timeline.push(createQuestionSlide(
+        `/${row['File Name']}`,
+        motionQuestionText,
+        ['Up', 'Down', 'Left', 'Right', 'Into screen', 'Out of screen'],
+        row['Motion Direction'],
+        row['Object Identity'],
+        'motion_direction',
+        idx,
+        prolificID
+      ));
+    }
   });
+
+  timeline.push({
+    type: htmlKeyboardResponse,
+    stimulus: `<p>End of Survey</p>`,
+  });
+
+  jsPsych.run(timeline);
+});
+
+
+
+// const endSlide = {
+//     type: htmlKeyboardResponse,
+//     stimulus: `
+//       <p>End of Survey</p>
+//     `,
+//     post_trial_gap: 1500
+//   };
+
+// // timeline.push(endSlide)
+
+
+// // Run the Experiment
+// jsPsych.run(timeline);

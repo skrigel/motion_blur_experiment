@@ -100,10 +100,10 @@ app.post("/api/responses", async (req, res) => {
   try {
     const { image, selection, trueLabel, trialType, trialId, prolificId } = req.body;
 
-    if (!responses[prolificId]) responses[prolificId] = [];
+    // if (!responses[prolificId]) responses[prolificId] = [];
 
-    const alreadyExists = responses[prolificId].some(r => r.trialId === trialId);
-    if (!alreadyExists) responses[prolificId].push(trialId);
+    // const alreadyExists = responses[prolificId].some(r => r.trialId === trialId);
+    // if (!alreadyExists) responses[prolificId].push(trialId);
 
     const newResponse = new Response({ image, selection, trueLabel, trialType, trialId, prolificId });
     await newResponse.save();
