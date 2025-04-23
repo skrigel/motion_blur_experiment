@@ -89,7 +89,7 @@ const createQuestionSlide = (imagePath, questionText, options, trueDir, trueIden
         trialId: trialId,
         prolificId: prolificID || "Unknown",
         rt: data.rt,
-        timeElapsed: data.timeElapsed
+        timeElapsed: data.time_elapsed
       };
     
       console.log("Payload being sent:", payload); // Debugging log
