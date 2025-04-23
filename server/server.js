@@ -10,6 +10,8 @@ import fs from 'fs';
 
 import { fileURLToPath } from "url";
 
+let responses = {}; // { prolificId: [{trialId, ...data}] }
+
 // Convert __filename and __dirname using import.meta.url
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -77,15 +79,32 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-// Define your API route for /api/responses
-app.get('/api/responses', (req, res) => {
-  res.json({ message: 'This is the API response' });
-});
+// // Define your API route for /api/responses
+// app.get('/api/responses', (req, res) => {
+//   res.json({ message: 'This is the API response' });
+// });
 
 // API Route to Save Responses
+app.get('api/get-progress', async (req, res) => {
+  const { prolificId } = req.query;
+  try {
+    const userResponses = await Response.find({ prolificId: prolificId });
+    const completed = userResponses.map(r => r.trialId);
+    res.json({ completedTrialIds: completed });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to retrieve progress" });
+  }
+});
+
 app.post("/api/responses", async (req, res) => {
   try {
     const { image, selection, trueLabel, trialType, trialId, prolificId } = req.body;
+
+    if (!responses[prolificId]) responses[prolificId] = [];
+
+    const alreadyExists = responses[prolificId].some(r => r.trialId === trialId);
+    if (!alreadyExists) responses[prolificId].push(trialId);
+
     const newResponse = new Response({ image, selection, trueLabel, trialType, trialId, prolificId });
     await newResponse.save();
     res.status(201).json({ message: "Response saved" });
