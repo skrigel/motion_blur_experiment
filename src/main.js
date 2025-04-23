@@ -40,7 +40,26 @@ timeline.push(instructions)
 //   type: fullscreenPlugin,
 //   fullscreen_mode: true,
 // });
+let prolificID = null;
 
+timeline.push({
+  type: surveyMultiChoice,
+  preamble: '<p>Please enter your Prolific ID to begin the experiment:</p>',
+  questions: [
+    {
+      prompt: 'Prolific ID:',
+      name: 'prolific_id',
+      required: true,
+      options: [], // Trick to make a text input instead of MCQ
+      columns: 0
+    }
+  ],
+  on_finish: function(data) {
+    const response = data.response;
+    prolificID = response['prolific_id'] || 'Unknown';
+    console.log('Prolific ID captured:', prolificID);
+  }
+});
 // Modify createQuestionSlide to send data
 const createQuestionSlide = (imagePath, questionText, options, trueDir, trueIdentity, trialType, trialId, prolificID) => {
   return {
@@ -82,7 +101,7 @@ const objectQuestionText = 'What is this object?';
 const motionQuestionText = 'What direction is this object moving in?';
 
 // Add Object Identification Question
-const prolificID = getProlificID();
+// const prolificID = getProlificID();
 let csvData = [];
 
 // fetch(`${API_URL}/data`)
