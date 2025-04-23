@@ -6,7 +6,7 @@ import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
 import { getProlificID, sendDataToServer  } from './utils';
 
 const API_URL = "https://motion-blur-experiment.onrender.com/api"
-
+// const API_URL ='http://localhost:10000'
 const imageOptions = ['human', 'animal', 'ball', 'vehicle']
 
 const timeline=[];
@@ -114,10 +114,15 @@ Promise.all([
   fetch(`${API_URL}/get-progress?prolificId=${prolificID}`).then(res => res.json())
 ]).then(([csvData, progress]) => {
 
-  const completed = !progress ? []: progress.completed;
+  const completed = new Set(
+    (progress.completedTrialIds || []).map(Number)
+  );
+  
+  console.log(csvData, completed)
 
   csvData.forEach((row, idx) => {
     if (!completed.has(idx)) {
+
       timeline.push(createQuestionSlide(
         `/${row['File Name']}`,
         objectQuestionText,
@@ -128,6 +133,7 @@ Promise.all([
         idx,
         prolificID
       ));
+
       timeline.push(createQuestionSlide(
         `/${row['File Name']}`,
         motionQuestionText,
@@ -139,10 +145,9 @@ Promise.all([
         prolificID
       ));
     }
+
   });
 
-
-});
 
 timeline.push({
   type: htmlKeyboardResponse,
@@ -150,6 +155,10 @@ timeline.push({
 });
 
 jsPsych.run(timeline);
+
+
+});
+
 
 // const endSlide = {
 //     type: htmlKeyboardResponse,

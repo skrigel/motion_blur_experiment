@@ -10,13 +10,13 @@ import fs from 'fs';
 
 import { fileURLToPath } from "url";
 
-let responses = {}; // { prolificId: [{trialId, ...data}] }
 
 // Convert __filename and __dirname using import.meta.url
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load environment variables
+
 dotenv.config();
 
 const app = express();
@@ -32,6 +32,9 @@ const server = app.listen(PORT, () => {
 const allowedOrigins = [
   "https://motion-blur-experiment-git-main-sashas-projects-116bdc35.vercel.app",
   "https://motion-blur-experiment.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:5173",  // vite dev server
+  "http://localhost:10000/"
 ];
 
 // ✅ Middleware to handle CORS
@@ -63,10 +66,6 @@ const responseSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
 });
 
-const userSchema = new mongoose.Schema({
-  name: String,
-  response: responseSchema
-});
 
 const Response = mongoose.model("Response", responseSchema);
 
@@ -119,12 +118,6 @@ app.get('/api/get-progress', async (req, res) => {
 app.post("/api/responses", async (req, res) => {
   try {
     const { image, selection, trueLabel, trialType, trialId, prolificId } = req.body;
-
-    // if (!responses[prolificId]) responses[prolificId] = [];
-
-    // const alreadyExists = responses[prolificId].some(r => r.trialId === trialId);
-    // if (!alreadyExists) responses[prolificId].push(trialId);
-
     const newResponse = new Response({ image, selection, trueLabel, trialType, trialId, prolificId });
     await newResponse.save();
     res.status(201).json({ message: "Response saved" });
@@ -136,6 +129,9 @@ app.post("/api/responses", async (req, res) => {
 app.get('/api/data', (req, res) => {
   const filePath = path.join(__dirname, 'data.csv'); // ✅ Points to /server/data.csv
   console.log('Reading file from:', filePath);
+
+  console.log("Incoming POST /api/responses");
+  console.log("Request body:", req.body);
 
   fs.readFile(filePath, 'utf8', (err, csvData) => {
     if (err) {
