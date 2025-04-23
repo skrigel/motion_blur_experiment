@@ -24,7 +24,7 @@ const instructions = {
   type: htmlKeyboardResponse,
   stimulus: `
     <p>In this experiment, an image will appear in the center 
-    of the screen.</p><p> There will be a blurred object highlighted in a geometric box, and 
+    of the screen.</p><p> There will be a blurred object to focus on in the image, and 
     you will be asked two questions about the object.</p>
     <p>1. <strong>What is the object?</strong> - pick the best choice amongst the provided options</p>
     <p>2. <strong>In what direction is the object moving?</strong> - pick the best choice amongst the provided options</p>
