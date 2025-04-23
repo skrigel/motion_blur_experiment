@@ -87,7 +87,9 @@ const createQuestionSlide = (imagePath, questionText, options, trueDir, trueIden
         trueLabel: trialType === 'object_identification' ? trueIdentity : trueDir,
         trialType: trialType || "No trial type provided", // Ensure trialType is included
         trialId: trialId,
-        prolificId: prolificID || "Unknown"
+        prolificId: prolificID || "Unknown",
+        rt: data.rt,
+        timeElapsed: data.timeElapsed
       };
     
       console.log("Payload being sent:", payload); // Debugging log
@@ -156,7 +158,7 @@ Promise.all([
       timeline.push(createQuestionSlide(
         `/${row['File Name']}`,
         motionQuestionText,
-        ['Up', 'Down', 'Left', 'Right', 'Into screen', 'Out of screen'],
+        ['up', 'down', 'left', 'right'],
         row['Motion Direction'],
         row['Object Identity'],
         'motion_direction',

@@ -63,6 +63,8 @@ const responseSchema = new mongoose.Schema({
   trialType: {type: String, required: true},
   trialId: {type: String, required: true},
   prolificId: {type: String, required: true},
+  rt: {type:String, required: true},
+  timeElapsed: {type:String, required:true},
   timestamp: { type: Date, default: Date.now },
 });
 
@@ -117,8 +119,8 @@ app.get('/api/get-progress', async (req, res) => {
 
 app.post("/api/responses", async (req, res) => {
   try {
-    const { image, selection, trueLabel, trialType, trialId, prolificId } = req.body;
-    const newResponse = new Response({ image, selection, trueLabel, trialType, trialId, prolificId });
+    const { image, selection, trueLabel, trialType, trialId, prolificId, rt, timeElapsed } = req.body;
+    const newResponse = new Response({ image, selection, trueLabel, trialType, trialId, prolificId, rt, timeElapsed });
     await newResponse.save();
     res.status(201).json({ message: "Response saved" });
   } catch (err) {
