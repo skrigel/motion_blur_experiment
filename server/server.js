@@ -85,7 +85,7 @@ app.get('/', (req, res) => {
 // });
 
 // API Route to Save Responses
-app.get('api/get-progress', async (req, res) => {
+app.get('/api/get-progress', async (req, res) => {
   const { prolificId } = req.query;
   try {
     const userResponses = await Response.find({ prolificId: prolificId });
