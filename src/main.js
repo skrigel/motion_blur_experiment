@@ -3,32 +3,11 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import fullscreenPlugin from '@jspsych/plugin-fullscreen';
 import imageButtonResponse from '@jspsych/plugin-image-button-response';
 import surveyMultiChoice from '@jspsych/plugin-survey-multi-choice';
-import { getProlificID } from './utils';
-import Papa from 'papaparse';
-
-// const exPath = "https://www.w3schools.com/images/img_girl.jpg"
+import { getProlificID, sendDataToServer  } from './utils';
 
 const API_URL = "https://motion-blur-experiment.onrender.com/api"
 
-async function sendDataToServer(responseData){
-  try {
-    const res = await fetch(`${API_URL}/responses`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(responseData),
-    });
-    const data = await res.json();
-    console.log("Server Response:", data);
-  } catch (error) {
-    console.error("Error sending data:", error);
-  }
-};
-
-
-const imageOptions = ['Bicycle', 'Car', 'Person', 'Scooter', 'Dog']
-
-
-
+const imageOptions = ['human', 'animal', 'ball', 'vehicle']
 
 const timeline=[];
 
@@ -86,7 +65,7 @@ const createQuestionSlide = (imagePath, questionText, options, trueDir, trueIden
       const payload = {
         image: data.image || "No image provided",  // Ensure image is included
         selection: responseValue || "Null",
-        trueLabel: trialType=== 'object_identification' ? trueIdentity : trueDir,
+        trueLabel: trialType === 'object_identification' ? trueIdentity : trueDir,
         trialType: trialType || "No trial type provided", // Ensure trialType is included
         trialId: trialId,
         prolificId: prolificID || "Unknown"
@@ -129,6 +108,18 @@ fetch(`${API_URL}/data`)
       ));
     });
   });
+
+
+
+const endSlide = {
+    type: htmlKeyboardResponse,
+    stimulus: `
+      <p>End of Survey</p>
+    `,
+    post_trial_gap: 1500
+  };
+
+// timeline.push(endSlide)
 
 
 // Run the Experiment
