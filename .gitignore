@@ -4,6 +4,9 @@ node_modules/
 # Vite build files
 /dist/
 
+#env variables
+.env
+
 # Logs
 *.log
 
